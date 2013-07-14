@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>reveal.js - The HTML Presentation Framework</title>
+    <title>BohConf 2013 - Clojure Workshop</title>
 
     <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
     <meta name="author" content="Hakim El Hattab">
@@ -28,17 +28,196 @@
     <!--[if lt IE 9]>
 	<script src="lib/js/html5shiv.js"></script>
 	<![endif]-->
+
+    <link rel="stylesheet" href="lib/css/bohconf.css">
   </head>
 
   <body>
 
-    <div class="reveal">
+    <div class="reveal" ng-app="slideshow">
 
       <!-- Any section element inside of this container is displayed as a slide -->
       <div class="slides">
-        
+        <section>
+          <h1>'Getting' Clojure</h1>
+          <h3>Parentheses are just hugs for your code</h3>
+          <small>Created by 
+            <a href="http://twitter.com/canweriotnow">Jason Lewis</a>
+            / <a href="http://twitter.com/gtrakgt">Gary Trakhman</a>
+          </small>
+
+        </section>
+
+        <section>
+          <h2>Functions</h2>
+          Javascript
+          <auto>
+            function(){
+              return 5;
+            }
+          </auto>
+        </section>
+        <section>
+          Put some parens around it, kill the braces
+          <auto>
+            (function()
+              return 5;
+              )
+          </auto>
+        </section>
+        <section>
+          Change 'function' to 'fn', makes args into a vector
+          <auto>
+            (fn []
+              return 5;
+              )
+          </auto>
+        </section>
+        <section>
+          Kill the 'return', last thing's always returned.
+          <auto>
+            (fn [] 5)
+          </auto>
+          Welcome to Clojure.
+        </section>
+        <section>
+          <h2>This isn't an accident</h2>
+          <ul>
+            <li>Javascript is 'Lisp in C's Clothing'</li>
+            <li>Says Crockford: <a href="http://www.crockford.com/javascript/javascript.html">http://www.crockford.com/javascript/javascript.html</a></li>
+          </ul>
+        </section>
+        <section>
+          <h2>Put another way...</h2>
+          <ul>
+            <li>Q: Why do you think we've gotten so much mileage out of javascript?</li>
+            <li>A: Lisp is very powerful, and it will never die</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Data</h2>
+Should look familiar
+          <auto>
+{:key1 5,
+ :key2 nil}
+
+[1 2 3 4 "five"]
+          </auto>
+Don't freak out
+          <clojure>
+[1 [2] #{3} {4 4} (constantly 5)]
+          </clojure>
+DON'T FREAK OUT
+          <clojure>
+-> (range 10)
+(0 1 2 3 4 5 6 7 8 9)
+
+-> (take 11 (range))
+(0 1 2 3 4 5 6 7 8 9 10)
+
+-> (last (range)) ;;Hope you don't mind waiting a long time.
+          </clojure>
+
+        </section>
+        <section>
+          <h2>Everything is Data</h2>
+          <auto>
+;; semicolons are comments, commas are ignored, 
+;; check out this weird hash-map
+{:a-keyword 5,
+
+ "a string key" "a string value", 
+
+ ["a" :vector "acting" :as [:a :compound] "key"]
+
+ (fn [] "a no-arg function
+that returns this multi-line string,
+the function itself is the value"),
+
+ + '(functions can be keys too, and when 
+you quote symbols, you just
+have symbols, not what they represent)}
+          </auto>
+Evals to...
+          <auto>
+{:a-keyword 5, "a string key" "a string value", 
+["a" :vector "acting" :as [:a :compound] "key"] 
+#&ltuser$eval331$fn__332 user$eval331$fn__332@a585ef>,
+#&ltcore$_PLUS_ clojure.core$_PLUS_@20a12d8f> 
+(functions can be keys too and when you quote symbols 
+ you just have symbols not what they represent)}
+          </auto>
+        </section>
+        <section>
+          <h3>Anything can be a key, because</h3>
+          <ol>
+            <li>Every object is also a 'value'</li>
+            <li>Values have true equality</li>
+            <li>Because Values Never Change (Immutability)</li>
+            <li>Without immutability, objects are just buckets in memory</li>
+          </ol>
+        </section>
+        <section>
+          <ul>
+            <li>Q: Why is this big news?</li>
+            <li>A: I can write code and rest assured that other parts of
+            my program can't change the data that I'm working on.</li>
+
+            <li class="pad20">Q: But I thought every program is simply a short-lived
+            http request handler that talks to a database. We just
+            throw everything out after every request.</li>
+            <li>A: Well, that's one way to do it.</li>
+
+          </ul>
+          
+        </section>
+        <section>
+          <a href="http://www.ibm.com/developerworks/library/wa-aj-multitier2/">http://www.ibm.com/developerworks/library/wa-aj-multitier2/</a>
+          <img src="lib/img/fig17.gif">
+        </section>
+
+        <section>
+          <h3>Node.js...</h3>
+          <a href="http://www.andrerodrigues.me/isel-workshop/intro.html#/24">http://www.andrerodrigues.me/isel-workshop/intro.html#/24</a>
+          <img src="lib/img/eventloop.png">
+        </section>
+        <section>
+          <h3>Node.js... is nothing new</h3>
+          <ul>
+            <li>We can write our own loops</li>
+            <li>Node.js assumes threaded programming is hard, and
+            throws out the baby with the bath-water</li>
+            <li>Threaded programming is hard without real 'Data' or
+            'Values'</li>
+            <li>Composition of any sort is simpler with data</li>
+          </ul>
+        </section>
 
 
+
+        <section>
+
+structuring programs
+  request handlers
+  nodejs
+  long-running server
+lisp->javascript->clojure
+    ->smalltalk->python/ruby->clojure
+concurrency
+data
+  composition vs alternatives
+  value of values
+code as data
+  macros
+  lazy-seq
+call to action
+
+        </section>
+        <section>
+          <clojure>
+          </clojure>
+        </section>
 
 
       </div>
@@ -48,6 +227,9 @@
     <script src="lib/js/head.min.js"></script>
     <script src="js/reveal.min.js"></script>
     <script src="js/angular.min.js"></script>
+
+
+    <script src="js/slideshow.js"></script>
 
     <script>
 
