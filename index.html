@@ -193,8 +193,35 @@ Evals to...
             <li>Composition of any sort is simpler with data</li>
           </ul>
         </section>
+        <section>
+          <h3>Approximating Node.js</h3>
+          <ul>
+            <li>'Agents' are asynchronous queues, sharing threadpools
+            to do work, storing the last value returned.</li>
+            <clojure>
+(defn inc-last [val] 
+  (conj val (inc (last val))))
 
+;; We make a sequence of 10 inc-last tasks,
+;; then follow-up with a 'println' task
+(def tasks 
+  (concat (repeat 10 inc-last)
+          [(fn [val] 
+             (println val)
+             val)]))
+            </clojure>
+          </ul>
+        </section>
+        <section>
+          <clojure>
+;; starts off with a value of [0]
+(let [a (agent [0])] 
+  (doseq [t tasks] 
+    (send a t)))
+          </clojure>
+prints: [0 1 2 3 4 5 6 7 8 9 10]
 
+        </section>
 
         <section>
 
