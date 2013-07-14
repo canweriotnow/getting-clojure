@@ -81,6 +81,18 @@
           Welcome to Clojure.
         </section>
         <section>
+          <h3>Calling Stuff</h3>
+          <auto>
+            someFunction(arg1, arg2, arg3);
+          </auto>
+          Move the left parenthesis over a bit more...
+          <clojure>
+            (someFunction arg1 arg2 arg3)
+          </clojure>
+          Done.
+        </section>
+
+        <section>
           <h2>This isn't an accident</h2>
           <ul>
             <li>Javascript is 'Lisp in C's Clothing'</li>
@@ -110,13 +122,13 @@ Don't freak out
           </clojure>
 DON'T FREAK OUT
           <clojure>
--> (range 10)
+=> (range 10)
 (0 1 2 3 4 5 6 7 8 9)
 
--> (take 11 (range))
+=> (take 11 (range))
 (0 1 2 3 4 5 6 7 8 9 10)
 
--> (last (range)) ;;Hope you don't mind waiting a long time.
+=> (last (range)) ;;Hope you don't mind waiting a long time.
           </clojure>
 
         </section>
@@ -157,17 +169,18 @@ Evals to...
             <li>Because Values Never Change (Immutability)</li>
             <li>Without immutability, objects are just buckets in memory</li>
           </ol>
+          <small class="pad80">...have you ever trusted a bucket with no values?</small>
         </section>
         <section>
           <ul>
             <li>Q: Why is this big news?</li>
-            <li>A: I can write code and rest assured that other parts of
+            <li class="pad20">A: I can write code and rest assured that other parts of
             my program can't change the data that I'm working on.</li>
 
-            <li class="pad20">Q: But I thought every program is simply a short-lived
+            <li class="pad80">Q: But I thought every program is simply a short-lived
             http request handler that talks to a database. We just
-            throw everything out after every request.</li>
-            <li>A: Well, that's one way to do it.</li>
+            throw the program state out after every request.</li>
+            <li class="pad20">A: Well, that's one way to do it.</li>
 
           </ul>
           
@@ -220,7 +233,20 @@ Evals to...
     (send a t)))
           </clojure>
 prints: [0 1 2 3 4 5 6 7 8 9 10]
+        </section>
+        <section>
+          <h2>MORE!</h2>
+        <clojure>
+(let [f (future (do-a-bunch-of-stuff))] ;; in another thread
+  (do-stuff-in-this-thread)
+  ;; return the value in f, blocking if it's not finished
+  (deref f)) 
+        </clojure>
 
+        <ul>Basically,
+          <li>Clojure promotes your ability to do whatever you want,
+          by simplifying things to their bare essence.</li>
+        </ul>
         </section>
 
         <section>
