@@ -370,6 +370,10 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
 
 ;; simply returns a list, allocates a Java object (LazySeq) and wraps
 ;; your expressions in a function
+
+(macroexpand-1 '(lazy-seq ANYTHING1 ANYTHING2))
+;; '(new clojure.lang.LazySeq (fn* [] ANYTHING1 ANYTHING2))
+
           </clojure>
         </section>
         <section>
