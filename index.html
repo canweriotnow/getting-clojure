@@ -166,7 +166,7 @@ Evals to...
           <ol>
             <li>Every object is also a 'value'</li>
             <li>Values have true equality</li>
-            <li>Because Values Never Change (Immutability)</li>
+            <li>Values Never Change (Immutability)</li>
             <li>Without immutability, objects are just buckets in memory</li>
           </ol>
           <small class="pad80">...have you ever trusted a bucket with no values?</small>
@@ -178,10 +178,9 @@ Evals to...
             my program can't change the data that I'm working on.</li>
 
             <li class="pad80">Q: But I thought every program is simply a short-lived
-            http request handler that talks to a database. We just
-            throw the program state out after every request.</li>
+            http request handler that talks to a database? We just
+            throw the program state out after every request!</li>
             <li class="pad20">A: Well, that's one way to do it.</li>
-
           </ul>
           
         </section>
@@ -231,8 +230,17 @@ Evals to...
 (let [a (agent [0])] 
   (doseq [t tasks] 
     (send a t)))
+
+;; prints: [0 1 2 3 4 5 6 7 8 9 10]
           </clojure>
-prints: [0 1 2 3 4 5 6 7 8 9 10]
+          
+          <ul>
+            <li>Agents are not values, they are mutable references with
+            asynchronous semantics</li>
+            <li>Clojure has other mutable references types, acting as
+            'containers' for values, for various use cases.</li>
+            <li>Nothing prevents you from making your own.</li>
+          </ul>
         </section>
         <section>
           <h2>MORE!</h2>
@@ -248,31 +256,160 @@ prints: [0 1 2 3 4 5 6 7 8 9 10]
           by simplifying things to their bare essence.</li>
         </ul>
         </section>
-
         <section>
+          <h2>What We Really Want</h2>
+          <ol>Tools that let us
+            <li>Compose Systems</li>
+            <li>Change our minds</li>
+            <li>Re-use components in different contexts, processes,
+            servers, etc..</li>
+          </ol>
+          <small class="pad80">Data/Values give us the ability to
+          decouple things easily</small>
+        </section>
+        <section>
+          <h1>Brainsplode</h1>
+          '(code is data)
+        </section>
+        <section>
+          <h1>R-E-P-L</h1>
+          Read-Eval-Print-Loop
+          <ol>
+            <li>Read: (read-string "(+ 1 2)") => '(+ 1 2)</li>
+            <li>Eval: (eval '(+ 1 2)) => 3</li>
+            <li>What if there's something in the middle?</li>
+          </ol>
+          <clojure>
+(class (read-string "(+ 1 2)"))
+;; clojure.lang.PersistentList
 
-structuring programs
-  request handlers
-  nodejs
-  long-running server
-lisp->javascript->clojure
-    ->smalltalk->python/ruby->clojure
-concurrency
-data
-  composition vs alternatives
-  value of values
-code as data
-  macros
-  lazy-seq
-call to action
+(map class (read-string "(+ 1 2)"))
+;; (clojure.lang.Symbol java.lang.Long java.lang.Long)
+          </clojure>
 
         </section>
         <section>
           <clojure>
+(defn only-even!
+ [val]
+ (if (and (integer? val) (odd? val))
+   (inc val)
+   val))
+
+(map only-even! (read-string "(+ 1 2)"))
+;; '(+ 2 2)
+
+(eval (map only-even! (read-string "(+ 1 2)")))
+;; 4
+          </clojure>
+
+This is only the beginning
+        </section>
+        <section>
+          Everybody likes chaining, right?
+          <auto>
+$("#p1").css("color","red").slideUp(2000).slideDown(2000);
+          </auto>
+          How is this implemented? Is this reusable?
+        </section>
+        <section>
+          What if, as a library author, you could just not write that
+          fluent interface code at all?
+          <clojure>
+(use 'clojure.string)
+
+;; These are equivalent
+
+(map trim (split (upper-case "hola, world") #","))
+;; ("HOLA" "WORLD")
+
+(-> "hola, world"
+    upper-case
+    (split #",")
+    (->> (map trim)))
+;; ("HOLA" "WORLD")
           </clojure>
         </section>
+        <section>
+            Really useful when you're doing a lot of collection operations,
+            filtering, etc.
+          <clojure>
+(->> (range) 
+     (filter even?) 
+     (map (partial * 2)) 
+     (take 10)
+     (into []))
+;; [0 4 8 12 16 20 24 28 32 36]
 
+;; versus
+(into [] 
+      (take 10 (map (partial * 2) 
+                    (filter even? (range)))))
+          </clojure>
+          <ol>
+            <li>I find the flat one easier to think about.</li>
+            <li>Semantically equivalent.</li>
+            <li>No burden on implementing code. Functions don't care
+            about how they're used.</li>
+          </ol>
+          <p class="pad80">
+          Giving the user choices is more effective with more powerful languages. Leads to simple, composable libraries.</p>
+        </section>
+        <section>
+          <h3>Macros</h3>
+          Let's look at a real one.
+          <clojure>
+(defmacro lazy-seq
+  "Takes a body of expressions that returns an ISeq or nil, and yields
+  a Seqable object that will invoke the body only the first time seq
+  is called, and will cache the result and return it on all subsequent
+  seq calls. See also - realized?"
+  {:added "1.0"}
+  [& body]
+  (list 'new 'clojure.lang.LazySeq (list* '^{:once true} fn* [] body)))
 
+;; simply returns a list, allocates a Java object (LazySeq) and wraps
+;; your expressions in a function
+          </clojure>
+        </section>
+        <section>
+          Let's create an infinite sequence representing a square-wave
+          <br />
+          --__--__--__--__
+
+          <clojure>
+(defn square-wave
+  "t is the period for a half-cycle"
+  [t]
+  (letfn 
+    [(osc [cur-value so-far] 
+       (let [so-far (mod so-far t)
+             next-val (if (zero? so-far)
+                        (- cur-value)
+                        cur-value)]
+         (cons next-val 
+               (lazy-seq (osc next-val 
+                              (inc so-far))))))]
+    (osc 1 0)))
+          </clojure>
+          <clojure>
+(take 10 (square-wave 3))
+;; (-1 -1 -1 1 1 1 -1 -1 -1 1)
+          </clojure>
+          No mutable variables
+        </section>
+        <section>
+          <h3>Call to Action</h3>
+          <ol>
+            <li>Learn Clojure</li>
+            <li>Build cool things</li>
+            <li>Screencasts!</li>
+          </ol>
+          <div class="pad80">
+            <small>(You ruby guys really know how to make good
+            screencasts)</small>
+          </div>
+        </section>
       </div>
 
     </div>
