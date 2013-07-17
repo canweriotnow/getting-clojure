@@ -41,7 +41,7 @@
         <section>
           <h1>'Getting' Clojure</h1>
           <h3>Parentheses are just hugs for your code</h3>
-          <small>Created by 
+          <small>Created by
             <a href="http://twitter.com/canweriotnow">Jason Lewis</a>
             / <a href="http://twitter.com/gtrakgt">Gary Trakhman</a>
           </small>
@@ -135,11 +135,11 @@ DON'T FREAK OUT
         <section>
           <h2>Everything is Data</h2>
           <auto>
-;; semicolons are comments, commas are ignored, 
+;; semicolons are comments, commas are ignored,
 ;; check out this weird hash-map
 {:a-keyword 5,
 
- "a string key" "a string value", 
+ "a string key" "a string value",
 
  ["a" :vector "acting" :as [:a :compound] "key"]
 
@@ -147,17 +147,17 @@ DON'T FREAK OUT
 that returns this multi-line string,
 the function itself is the value"),
 
- + '(functions can be keys too, and when 
+ + '(functions can be keys too, and when
 you quote symbols, you just
 have symbols, not what they represent)}
           </auto>
 Evals to...
           <auto>
-{:a-keyword 5, "a string key" "a string value", 
-["a" :vector "acting" :as [:a :compound] "key"] 
+{:a-keyword 5, "a string key" "a string value",
+["a" :vector "acting" :as [:a :compound] "key"]
 #&ltuser$eval331$fn__332 user$eval331$fn__332@a585ef>,
-#&ltcore$_PLUS_ clojure.core$_PLUS_@20a12d8f> 
-(functions can be keys too and when you quote symbols 
+#&ltcore$_PLUS_ clojure.core$_PLUS_@20a12d8f>
+(functions can be keys too and when you quote symbols
  you just have symbols not what they represent)}
           </auto>
         </section>
@@ -182,7 +182,7 @@ Evals to...
             throw the program state out after every request!</li>
             <li class="pad20">A: Well, that's one way to do it.</li>
           </ul>
-          
+
         </section>
         <section>
           <a href="http://www.ibm.com/developerworks/library/wa-aj-multitier2/">http://www.ibm.com/developerworks/library/wa-aj-multitier2/</a>
@@ -211,14 +211,14 @@ Evals to...
             <li>'Agents' are asynchronous queues, sharing threadpools
             to do work, storing the last value returned.</li>
             <clojure>
-(defn inc-last [val] 
+(defn inc-last [val]
   (conj val (inc (last val))))
 
 ;; We make a sequence of 10 inc-last tasks,
 ;; then follow-up with a 'println' task
-(def tasks 
+(def tasks
   (concat (repeat 10 inc-last)
-          [(fn [val] 
+          [(fn [val]
              (println val)
              val)]))
             </clojure>
@@ -227,13 +227,13 @@ Evals to...
         <section>
           <clojure>
 ;; starts off with a value of [0]
-(let [a (agent [0])] 
-  (doseq [t tasks] 
+(let [a (agent [0])]
+  (doseq [t tasks]
     (send a t)))
 
 ;; prints: [0 1 2 3 4 5 6 7 8 9 10]
           </clojure>
-          
+
           <ul>
             <li>Agents are not values, they are mutable references with
             asynchronous semantics</li>
@@ -248,7 +248,7 @@ Evals to...
 (let [f (future (do-a-bunch-of-stuff))] ;; in another thread
   (do-stuff-in-this-thread)
   ;; return the value in f, blocking if it's not finished
-  (deref f)) 
+  (deref f))
         </clojure>
 
         <ul>Basically,
@@ -334,16 +334,16 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
             Really useful when you're doing a lot of collection operations,
             filtering, etc.
           <clojure>
-(->> (range) 
-     (filter even?) 
-     (map (partial * 2)) 
+(->> (range)
+     (filter even?)
+     (map (partial * 2))
      (take 10)
      (into []))
 ;; [0 4 8 12 16 20 24 28 32 36]
 
 ;; versus
-(into [] 
-      (take 10 (map (partial * 2) 
+(into []
+      (take 10 (map (partial * 2)
                     (filter even? (range)))))
           </clojure>
           <ol>
@@ -385,14 +385,14 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
 (defn square-wave
   "t is the period for a half-cycle"
   [t]
-  (letfn 
-    [(osc [cur-value so-far] 
+  (letfn
+    [(osc [cur-value so-far]
        (let [so-far (mod so-far t)
              next-val (if (zero? so-far)
                         (- cur-value)
                         cur-value)]
-         (cons next-val 
-               (lazy-seq (osc next-val 
+         (cons next-val
+               (lazy-seq (osc next-val
                               (inc so-far))))))]
     (osc 1 0)))
           </clojure>
@@ -413,6 +413,21 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
             <small>(You ruby guys really know how to make good
             screencasts)</small>
           </div>
+        </section>
+        <section>
+          <h3>Demo Time</h3>
+          <h5>Clojure on the Web</h5>
+          <div class="pad80">
+            Now clone this:
+            <br />
+            <a href="https://github.com/canweriotnow/bohjure">
+              https://github.com/canweriotnow/bohjure
+            </a>
+          </div>
+        </section>
+        <section>
+          <h3>Demo Time</h3>
+          ???
         </section>
       </div>
 
