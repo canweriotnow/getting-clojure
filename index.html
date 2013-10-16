@@ -169,6 +169,26 @@
             <h2>And Now Back To Clojure...</h2>
         </section>
         <section>
+          <h2>And in 2007...</h2>
+          <img src="img/hickey.jpg" />
+        </section>
+        <section>
+            <h2>State</h2>
+            <small>You probably <em>are</em> doing it wrong</small>
+            <p>
+                <em>Immutability</em> lets us reason about state, behaviour, and interaction without complecting the three.
+            </p>
+        </section>
+        <section>
+            <h2> Clojure can Help </h2>
+            <p>We get a number of powerful tools for managing state:</p>
+            <ul>
+                <li>Immutability is the default</li>
+                <li>Mutation is always explicit, never implicit</li>
+                <li>Rich set of tools for managing state, via atomic references to values (refs and agents)</li>
+            </ul>
+        </section>
+        <section>
           <h2>Data</h2>
 Should look familiar
           <auto>
@@ -222,6 +242,23 @@ Evals to...
  you just have symbols not what they represent)}
           </auto>
         </section>
+        <section>
+            <h2>No, really. Everything is data</h2>
+            <h5>Higher-order Functions</h5>
+            <clojure>
+                '(1 2 3)
+                ;; (1 2 3)
+
+                (cons '+ '(1 2 3))
+                ;; (+ 1 2 3)
+
+                (eval (cons '+ '(1 2 3)))
+                ;; 6
+
+                (apply + '(1 2 3))
+                ;; 6
+            </clojure>
+          </section>
         <section>
           <h3>Anything can be a key, because</h3>
           <ol>
@@ -317,26 +354,7 @@ Evals to...
           by simplifying things to their bare essence.</li>
         </ul>
         </section>
-        <section>
-          <h2>And in 2007...</h2>
-          <img src="img/hickey.jpg" />
-        </section>
-        <section>
-            <h2>State</h2>
-            <small>You probably <em>are</em> doing it wrong</small>
-            <p>
-                <em>Immutability</em> lets us reason about state, behaviour, and interaction without complecting the three.
-            </p>
-        </section>
-        <section>
-            <h2> Clojure can Help </h2>
-            <p>We get a number of powerful tools for managing state:</p>
-            <ul>
-                <li>Immutability is the default</li>
-                <li>Mutation is always explicit, never implicit</li>
-                <li>Rich set of tools for managing state, via atomic references to values (refs and agents)</li>
-            </ul>
-        </section>
+
         <section>
           <h2>What We Really Want</h2>
           <ol>Tools that let us
