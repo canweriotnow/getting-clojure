@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>BohConf 2013 - Clojure Workshop</title>
+    <title>Getting Clojure</title>
 
     <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
     <meta name="author" content="Hakim El Hattab">
@@ -39,7 +39,7 @@
       <!-- Any section element inside of this container is displayed as a slide -->
       <div class="slides">
         <section>
-          <h1>'Getting' Clojure</h1>
+          <h1>'Getting' Clojure 2.0</h1>
           <h3>'(Parentheses are just hugs for your code)</h3>
           <small>Created by
             <a href="http://twitter.com/canweriotnow">Jason Lewis</a>
@@ -89,7 +89,8 @@
           <clojure>
             (someFunction arg1 arg2 arg3)
           </clojure>
-          Done.
+            <small>(commas are just whitespace in Clojure)</small>
+            <p>Done.</p>
         </section>
 
         <section>
@@ -106,7 +107,67 @@
             <li>A: Lisp is very powerful, and it will never die</li>
           </ul>
         </section>
-
+        <section>
+            <h2>Lisp Break</h2>
+            <p>Most people freak out about the syntax (or lack thereof)</p>
+            <p>You're not going to be one of them.</p>
+        </section>
+        <section>
+            <h2>In 1958...</h2>
+            <img src="img/mccarthy.jpg" />
+        </section>
+        <section>
+            <h2>Why does it matter?</h2>
+            <h4>Here's some Ruby</h4>
+            <auto>
+                def fib(n)
+                  return n if (0..1).include? n
+                  fib(n-1) + fib(n-2)
+                end
+            </auto>
+            <p>
+                <em>Let's pretend this won't blow the stack</em>
+            </p>
+        </section>
+        <section>
+            <h2>Abstract Syntax Tree</h2>
+            <p>Here's what's going on once that's parsed:</p>
+            <auto>
+            s(:defn,
+             :fib,
+             s(:args, :n),
+             s(:if,
+                s(:call,
+                  s(:lvar, :n), :&lt;,
+                    s(:lit, 2)),
+                      s(:return, s(:lvar, :n)), nil),
+             s(:call,
+              s(:call, nil, :fib, s(:call, s(:lvar, :n), :-, s(:lit, 1))),
+              :+,
+              s(:call, nil, :fib, s(:call, s(:lvar, :n), :-, s(:lit, 2)))))
+            </auto>
+        </section>
+        <section>
+            <h2>And Lisp?</h2>
+            <h4>Here's some Scheme</h4>
+            <auto>
+                (define (fib n)
+                  (if (&lt; n 2)
+                      n
+                      (+ (fib (- n 1))
+                         (fib (- n 2)))))
+            </auto>
+            <p>Now we're coding <em>in</em> the AST</p>
+            <small>This <em>won't</em> blow the stack, but let's save TCO for another time.</small>
+        </section>
+        <section>
+            <h2>And this gets us... what?</h2>
+            <h1>MACROS</h1>
+            <p>But we'll get to that...</p>
+        </section>
+        <section>
+            <h2>And Now Back To Clojure...</h2>
+        </section>
         <section>
           <h2>Data</h2>
 Should look familiar
@@ -257,6 +318,26 @@ Evals to...
         </ul>
         </section>
         <section>
+          <h2>And in 2007...</h2>
+          <img src="img/hickey.jpg" />
+        </section>
+        <section>
+            <h2>State</h2>
+            <small>You probably <em>are</em> doing it wrong</small>
+            <p>
+                <em>Immutability</em> lets us reason about state, behaviour, and interaction without complecting the three.
+            </p>
+        </section>
+        <section>
+            <h2> Clojure can Help </h2>
+            <p>We get a number of powerful tools for managing state:</p>
+            <ul>
+                <li>Immutability is the default</li>
+                <li>Mutation is always explicit, never implicit</li>
+                <li>Rich set of tools for managing state, via atomic references to values (refs and agents)</li>
+            </ul>
+        </section>
+        <section>
           <h2>What We Really Want</h2>
           <ol>Tools that let us
             <li>Compose Systems</li>
@@ -353,7 +434,7 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
             about how they're used.</li>
           </ol>
           <p class="pad80">
-          Giving the user choices is more effective with more powerful languages. Leads to simple, composable libraries.</p>
+          Giving developers choices is more effective with more powerful languages. Leads to simple, composable libraries.</p>
         </section>
         <section>
           <h3>Macros</h3>
@@ -410,19 +491,8 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
             <li>Screencasts!</li>
           </ol>
           <div class="pad80">
-            <small>(You ruby guys really know how to make good
+            <small>(We need to catch up with Ruby on awesome
             screencasts)</small>
-          </div>
-        </section>
-        <section>
-          <h3>Demo Time</h3>
-          <h5>Clojure on the Web</h5>
-          <div class="pad80">
-            Now clone this:
-            <br />
-            <a href="https://github.com/canweriotnow/bohjure">
-              https://github.com/canweriotnow/bohjure
-            </a>
           </div>
         </section>
         <section>
@@ -435,13 +505,7 @@ $("#p1").css("color","red").slideUp(2000).slideDown(2000);
           <div>Community docs: <a href="http://clojuredocs.org">http://clojuredocs.org</a></div>
           <div>Blogs: <a href="http://planet.clojure.in">http://planet.clojure.in</a></div>
           <div>Light Table: <a href="http://www.lighttable.com">http://www.lighttable.com</a></div>
-
-          <div>this doc: <a href="http://gtrak.github.io/bohconf.clojure">http://gtrak.github.io/bohconf.clojure</a></div>
-        </section>
-
-        <section>
-          <h3>MORE Demo Time</h3>
-
+          <div>this doc: <a href="http://decomplecting.org/getting-clojure">http://decomplecting.org/getting-clojure</a></div>
         </section>
         <section>
           <h3>Thanks for coming!</h3>
